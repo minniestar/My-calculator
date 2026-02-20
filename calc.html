@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Calculator</title>
+  <style>
+    // some css for the calcus
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background:   wood;
+      font-family: 'Roboto', sans-serif;
+    }
+    .calculator {
+      background: #115f77;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      display: grid;
+      grid-template-columns: repeat(4, 70px);
+      gap: 10px;
+    }
+    .display {
+      grid-column: span 4;
+      height: 50px;
+      font-size: 22px;
+      text-align: right;
+      padding: 10px;
+      border: 1px solid #105c74;
+      border-radius: 5px;
+    }
+    button {
+      padding: 20px;
+      font-size: 18px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      background: #6528d6;
+    }
+    button.operator { background: #052452; color: #f31f1f; }
+    button.equal { background: #198f1d; color: #057ada; grid-column: span 2; }
+    button.clear { background: #aa2706; color: #fff; }
+    button:hover { background: #c3d7eb; }
+  </style>
+</head>
+<body>
+
+  <div class="calculator">
+    <input type="text" class="display" id="display" readonly>
+    <button class="clear">C</button>
+    <button class="operator">/</button>
+    <button class="operator">*</button>
+    <button class="operator">-</button>
+    <button class="num">7</button>
+    <button class="num">8</button>
+    <button class="num">9</button>
+    <button class="operator">+</button>
+    <button class="num">4</button>
+    <button class="num">5</button>
+    <button class="num">6</button>
+    <button class="num">1</button>
+    <button class="num">2</button>
+    <button class="num">3</button>
+    <button class="num">0</button>
+    <button class="num">00</button>
+    <button class="num">.</button>
+    <button class="equal">=</button>
+  </div>
+  
+  <script>
+    const display = document.getElementById('display');
+    const buttons = document.querySelectorAll('button');
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (btn.classList.contains('clear')) {
+          display.value = '';
+        } else if (btn.classList.contains('equal')) {
+          try {
+            display.value = Function('"use strict";return (' + display.value + ')')();
+          } catch {
+            display.value = 'Error';
+          }
+        } else {
+          display.value += btn.textContent;
+        }
+      });
+    });
+
+
+
+    // Keyboard support
+
+    document.addEventListener('keydown', (e) => {
+      if (!isNaN(e.key) || ['+', '-', '*', '/', '.'].includes(e.key)) {
+        display.value += e.key;
+      } else if (e.key === 'Enter') {
+        try {
+          display.value = Function('"use strict";return (' + display.value + ')')();
+        } catch {
+          display.value = 'Error';
+        }
+      } else if (e.key === 'Backspace') {
+        display.value = display.value.slice(0, -1);
+      } else if (e.key.toLowerCase() === 'c') {
+        display.value = '';
+      }
+    });
+  </script>
+</body>
+</html>
